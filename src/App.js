@@ -3,58 +3,17 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from 'uuid';
 
 const playerList = [
-  { id: uuidv4(), content: "First task" },
-  { id: uuidv4(), content: "Second task" },
-  { id: uuidv4(), content: "Third task" },
-  { id: uuidv4(), content: "Fourth task" },
-  { id: uuidv4(), content: "Fifth task" },
-  { id: uuidv4(), content: "First task" },
-  { id: uuidv4(), content: "Second task" },
-  { id: uuidv4(), content: "Third task" },
-  { id: uuidv4(), content: "Fourth task" },
-  { id: uuidv4(), content: "Fifth task" },
-  { id: uuidv4(), content: "First task" },
-  { id: uuidv4(), content: "Second task" },
-  { id: uuidv4(), content: "Third task" },
-  { id: uuidv4(), content: "Fourth task" },
-  { id: uuidv4(), content: "Fifth task" },
-  { id: uuidv4(), content: "First task" },
-  { id: uuidv4(), content: "Second task" },
-  { id: uuidv4(), content: "Third task" },
-  { id: uuidv4(), content: "Fourth task" },
-  { id: uuidv4(), content: "Fifth task" },
-  { id: uuidv4(), content: "First task" },
-  { id: uuidv4(), content: "Second task" },
-  { id: uuidv4(), content: "Third task" },
-  { id: uuidv4(), content: "Fourth task" },
-  { id: uuidv4(), content: "Fifth task" },
-  { id: uuidv4(), content: "First task" },
-  { id: uuidv4(), content: "Second task" },
-  { id: uuidv4(), content: "Third task" },
-  { id: uuidv4(), content: "Fourth task" },
-  { id: uuidv4(), content: "Fifth task" },
+  { id: uuidv4(), content: "1 task" },
+  { id: uuidv4(), content: "2 task" },
+  { id: uuidv4(), content: "3 task" },
+  { id: uuidv4(), content: "4 task" },
+  { id: uuidv4(), content: "5 task" },
 ];
 
 const rowsFromBackend = {
-  FW : {
-    name: "FW",
-    items: []
-  },
-  FW2 : {
-    name: "FW2",
-    items: []
-  },
-  MF: {
-    name: "MF",
-    items: []
-  },
-  DF: {
-    name: "DF",
-    items: []
-  },
   GK: {
     name: "GK",
-    items: []
+    items: [{ id: uuidv4(), content: "" },{ id: uuidv4(), content: "" },{ id: uuidv4(), content: "" },{ id: uuidv4(), content: "" },{ id: uuidv4(), content: "" },]
   },
   List: {
     name: "List",
@@ -63,6 +22,9 @@ const rowsFromBackend = {
 };
 
 const onDragEnd = (result, rows, setRows) => {
+  console.log(result)
+  console.log(rows)
+  console.log(setRows)
   if (!result.destination) return;
   const { source, destination } = result;
 
@@ -71,8 +33,8 @@ const onDragEnd = (result, rows, setRows) => {
     const destColumn = rows[destination.droppableId];
     const sourceItems = [...sourceColumn.items];
     const destItems = [...destColumn.items];
-    const [removed] = sourceItems.splice(source.index, 1);
-    destItems.splice(destination.index, 0, removed);
+    const [removed] = sourceItems.splice(source.index, 1,{ id: uuidv4(), content: "" });
+    destItems.splice(destination.index, 1, removed);
     setRows({
       ...rows,
       [source.droppableId]: {
@@ -111,16 +73,18 @@ function App() {
     // }
   }
   console.log(rows.GK.items.length)
+  console.log(rows)
 
+  const resetItem = () => {
+    console.log('lam moi')
+    setRows(rowsFromBackend)
+  }
   return (
     <div>
       <div>
-        <button onClick={() => check()}>dd</button>
-        <button onClick={() => check()}>dd</button>
-        <button onClick={() => check()}>dd</button>
-        
+
       </div>
-      <div style={{ display: "flex", justifyContent: "center", flexDirection: 'column', height: '60rem', }}>      
+      <div style={{ display: "flex", justifyContent: "center", flexDirection: 'column', height: '60rem', }}>
         <DragDropContext
           onDragEnd={result => onDragEnd(result, rows, setRows)}
         >
@@ -156,7 +120,7 @@ function App() {
                             flexDirection: 'row',
                             overflowX: "auto",
                             width: "100vw",
-                            justifyContent: 'space-around',
+                            justifyContent: 'start',
                             minHeight: '8rem',
                             alignContent : 'center'
                           }}
@@ -179,13 +143,17 @@ function App() {
                                         padding: 4,
                                         height: '6rem',
                                         minHeight: "6rem",
-                                        width: '4rem',
-                                        minWidth: "4rem",
+                                        width: '6rem',
+                                        minWidth: "6rem",
+                                        borderRadius:'100%',
                                         backgroundColor: snapshot.isDragging
                                           ? "#263B4A"
                                           : "#456C86",
                                         color: "white",
                                         border: '1px solid black',
+                                        display:'flex',
+                                        alignItems:'center',
+                                        justifyContent:'center',
                                         ...provided.draggableProps.style
                                       }}
                                     >
@@ -206,6 +174,7 @@ function App() {
             );
           })}
         </DragDropContext>
+        <button onClick={resetItem}>Lam moi</button>
       </div>
     </div>
   );
